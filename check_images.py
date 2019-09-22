@@ -35,10 +35,11 @@ def main():
     # TODO: 1. Define start_time to measure total program runtime by
     # collecting start time
     start_time = time()
-    sleep(1)
+    sleep(2)
     # TODO: 2. Define get_input_args() function to create & retrieve command
     # line arguments
     in_arg = get_input_args()
+    print("The path of the pet images is:",in_arg.dir,"\nThe model architecture is:",in_arg.arch,"\nThe file path is:",in_arg.dogfile)
     
     # TODO: 3. Define get_pet_labels() function to create pet image labels by
     # creating a dictionary with key=filename and value=file label to be used
@@ -75,6 +76,7 @@ def main():
     hours = int(tot_time / 3600)
     mins = int((tot_time % 3600) / 60)
     secs = int(tot_time - hours * 3600 - mins * 60)
+    print("\n Total time is :{} seconds".format(tot_time))
     print("\n** Total Elapsed Runtime:{}hours,{}mins,{}seconds".format(hours,mins,secs))
 
 
@@ -87,7 +89,7 @@ def main():
 
 def get_input_args():
     """
-    Retrieves and parses the command line arguments created and defined using
+    Retrieves and - the command line arguments created and defined using
     the argparse module. This function returns these arguments as an
     ArgumentParser object. 
      3 command line arguments are created:
@@ -101,7 +103,14 @@ def get_input_args():
     Returns:
      parse_args() -data structure that stores the command line arguments object  
     """
-    pass
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--dir",type = str,default = 'pet_images/')
+    parser.add_argument("--arch", type = str,default = "vgg")
+    parser.add_argument("--dogfile",type = str,default = "dognames.txt")
+
+    return parser.parse_args()
+
 
 
 def get_pet_labels():
