@@ -49,7 +49,7 @@ def main():
     # TODO: 4. Define classify_images() function to create the classifier 
     # labels with the classifier function using in_arg.arch, comparing the 
     # labels, and creating a dictionary of results (result_dic)
-    result_dic = classify_images()
+    result_dic = classify_images(in_arg.dir,answers_dic,in_arg.arch)
     
     # TODO: 5. Define adjust_results4_isadog() function to adjust the results
     # dictionary(result_dic) to determine if classifier correctly classified
@@ -139,11 +139,12 @@ def get_pet_labels(image_dir):
            pet_label += i+" "
            pet_label = pet_label.strip()
            petlabels_dic[pet_image] = str(pet_label) 
-    print(petlabels_dic)
+   
+    return petlabels_dic
     
 
 
-def classify_images():
+def classify_images(images_dir,petlabel_dic,model):
     """
     Creates classifier labels with classifier function, compares labels, and 
     creates a dictionary containing both labels and comparison of them to be
@@ -168,6 +169,17 @@ def classify_images():
                     idx 2 = 1/0 (int)   where 1 = match between pet image and 
                     classifer labels and 0 = no match between labels
     """
+    test_image_folder = images_dir
+    model = model
+    classifier_label = []
+    file_dir = listdir(test_image_folder)
+    
+    for my_file in file_dir:
+        pet_image_path = "pet_images/" + my_file
+        classifier_label.append(classifier(pet_image_path, model))
+
+    print(classifier_label)
+
     pass
 
 
