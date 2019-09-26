@@ -221,29 +221,41 @@ def adjust_results4_isadog(results_dic,dogsfile):
            None - results_dic is mutable data type so no return needed.
     """ 
     dognames_dic = {}
-    with open("dognames.txt") as f:
-        for line in f:
-            for key in dognames_dic:
-                if line.strip() == key:
-                    print("duplicate dog names in dognames.txt")
-            dognames_dic[line.strip()] = 1
-    index3 = 0
-    index4 = 0
-    for result_key in results_dic:
-        for key in dognames_dic:
-            if results_dic[result_key][0].find(key) >= 0:
-                index3 = 1
-                break
+    with open("dognames.txt",'r') as f:
+        line = f.readline()
+        while line !='':
+            if line in dognames_dic:
+                print("**Warning: Duplicate dognames", line)
             else:
-                index3 = 0
-        for key in dognames_dic:      
-            if results_dic[result_key][1].find(key) >= 0:
-                index4 = 1
-                break
+                dognames_dic[line.rstrip()] = 1
+            line = f.readline()
+    for key in results_dic:
+
+        # Pet Image Label IS of Dog (e.g. found in dognames_dic)
+        if results_dic[key][0] in dognames_dic:
+            
+            # Classifier Label IS image of Dog (e.g. found in dognames_dic)
+            # appends (1, 1) because both labels are dogs
+            if results_dic[key][1] in dognames_dic:
+                results_dic[key].extend((1, 1))
+                
+            # Classifier Label IS NOT image of dog (e.g. NOT in dognames_dic)
+            # appends (1,0) because only pet label is a dog
             else:
-                index4 = 0
-        results_dic[result_key].append(index3)
-        results_dic[result_key].append(index4)
+                results_dic[key].extend((1, 0))
+            
+        # Pet Image Label IS NOT a Dog image (e.g. NOT found in dognames_dic)
+        else:
+            # Classifier Label IS image of Dog (e.g. found in dognames_dic)
+            # appends (0, 1)because only Classifier labe is a dog
+            if results_dic[key][1] in dognames_dic:
+                results_dic[key].extend((0, 1))
+                
+            # Classifier Label IS NOT image of Dog (e.g. NOT in dognames_dic)
+            # appends (0, 0) because both labels aren't dogs
+            else:
+                results_dic[key].extend((0, 0))
+    print(results_dic)
 
 
 
